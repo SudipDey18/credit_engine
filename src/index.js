@@ -6,7 +6,7 @@ db.query("SELECT 1")
   .then(() => {
     console.log("db connected");
 
-    app.listen(3008, () => {
+    app.listen(3000, () => {
       console.log("Working");
     });
   })
