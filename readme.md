@@ -9,8 +9,8 @@ A Node.js + Express-based REST API for user registration with referral rewards, 
 1. **Clone the repository**
 
    ```bash
-   git clone <https://github.com/SudipDey18/credit_engine.git>
-   cd <project-directory>
+   git clone https://github.com/SudipDey18/credit_engine.git
+   cd credit_engine
    ```
 
 2. **Install dependencies**
