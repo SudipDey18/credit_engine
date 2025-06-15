@@ -1,67 +1,81 @@
 # Credit Engine API
 
-This is a Node.js REST API built with Express and MySQL for managing users, their referral-based signup system, and credit history.
+A Node.js + Express-based REST API for user registration with referral rewards, post creation, and credit tracking using a MySQL database.
 
-## Features
+---
 
-* User registration with referral code support
-* Credit point system for signups and referrals
-* Retrieve user credit history and total credits
-* Fully tested using Jest and Supertest
+## ⚙️ Setup Instructions
 
-## Installation
+1. **Clone the repository**
 
-1. Clone the repository:
+   ```bash
+   git clone <https://github.com/SudipDey18/credit_engine.git>
+   cd <project-directory>
+   ```
 
-```bash
-   git clone <your-repo-url>
-```
+2. **Install dependencies**
 
-2. Install dependencies:
-
-```bash
+   ```bash
    npm install
+   ```
+
+3. **Environment Configuration**
+   Create a `.env` file in the root directory with the following:
+
+   ```env
+   DB_HOST=your-db-host
+   DB_PORT=your-db-port
+   DB_USER=your-db-user
+   DB_PASSWORD=your-db-password
+   DB_NAME=your-db-name
+   CA_CERTIFICATE=path-to-ca-certificate
+   ```
+
+4. **Run the server**
+
+   ```bash
+   nodemon index.js
+   ```
+
+---
+
+## 📁 Project Structure
+
 ```
+src/
+├── Config/
+│   └── db.js           # DB connection pool setup
+├── Routes/
+│   └── api.js          # All main API routes
+├── app.js              # Express app setup
+├── index.js            # App entry and DB check
 
-3. Set up your `.env` file with the following:
-
-```env
-DB_HOST=your-database-host
-DB_PORT=3306
-DB_USER=your-username
-DB_PASSWORD=your-password
-DB_NAME=your-db-name
-CA_CERTIFICATE=your-ca-cert
-```
-
-4. Start the server:
-
-```bash
-   npm run dev
+tests/
+├── userCreation.test.js
+├── creditHistory.test.js
+├── postCreation.test.js
 ```
 
 ---
 
-## API Endpoints
+## 📄 API Endpoints
 
-### POST `/api/create`
+### ➕ POST `/api/create`
 
-Registers a new user with optional referral code.
+Create a user and assign credits. Supports referral code logic.
 
-#### Request Payload
+**Request Body:**
 
 ```json
 {
-  "username": "sudip",
-  "email": "new2@example.com",
-  "password": "123",
-  "refferalCode": "dfgvhbjk"  // optional but rewarded
+  "username": "john",
+  "email": "john@example.com",
+  "password": "pass123",
+  "refferalCode": "abcd1234"
 }
 ```
 
-#### Responses
-
-* **200 OK**: User created successfully
+**Success Response:**
 
 ```json
 {
@@ -69,39 +83,19 @@ Registers a new user with optional referral code.
 }
 ```
 
-* **500 Error**:
+**Error Responses:**
 
-  * Username already exists:
+* `{ "message": "username already exist" }`
+* `{ "message": "email already exist" }`
+* `{ "message": "something went wrong" }`
 
-  ```json
-  {
-    "message": "username already exist"
-  }
-  ```
+---
 
-  * Email already exists:
+### 📄 GET `/api/user/:username`
 
-  ```json
-  {
-    "message": "email already exist"
-  }
-  ```
+Fetch credit history and total credits for a user.
 
-  * Database or logic error:
-
-  ```json
-  {
-    "message": "something went wrong"
-  }
-  ```
-
-### GET `/api/user/:username`
-
-Fetches the total credit and credit history of a user.
-
-#### Response
-
-* **200 OK**:
+**Success Response:**
 
 ```json
 {
@@ -116,44 +110,66 @@ Fetches the total credit and credit history of a user.
 }
 ```
 
-* **500 Error**:
+**Error Response:**
 
-```json
-{
-  "message": "user not exist" | "something went wrong"
-}
-```
+* `{ "message": "user not exist" }`
 
 ---
 
-## Testing
+### 📜 POST `/api/post`
 
-Run tests using:
+Create a new post and reward the user with credits.
+
+**Request Body:**
+
+```json
+{
+  "username": "john",
+  "postTitle": "My Post",
+  "postContent": "This is my post content."
+}
+```
+
+**Success Response:**
+
+```json
+{
+  "message": "post created sucessfully"
+}
+```
+
+**Error Responses:**
+
+* `{ "message": "Missing required fields" }`
+* `{ "message": "something went Wrong" }`
+
+---
+
+## 🔮 Running Tests
+
+Run tests using Jest and Supertest:
 
 ```bash
 npm test
 ```
 
-Test files:
+Test coverage includes:
 
-* `userCreation.test.js`: Tests for user creation endpoint
-* `creditHistory.test.js`: Tests for user credit history endpoint
+* `/api/create`: `userCreation.test.js`
+* `/api/user/:username`: `creditHistory.test.js`
+* `/api/post`: `postCreation.test.js`
+
+---
+
+## 📅 Tech Stack
+
+* Node.js
+* Express.js
+* MySQL (mysql2)
+* Jest + Supertest
 
 ---
 
-## Project Structure
+## 👥 Author
 
-```
-src/
-├── Config/
-│   └── db.js            # MySQL connection
-├── Routes/
-│   └── api.js           # API route handlers
-├── app.js               # Express configuration
-├── index.js             # Entry point
-├── Tests/
-│   ├── userCreation.test.js
-│   └── creditHistory.test.js
-```
-
----
+Sudip Dey
